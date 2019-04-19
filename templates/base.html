@@ -1,0 +1,58 @@
+{% load bootstrap4 %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% bootstrap_css %}
+    {% if 'javascript_in_head'|bootstrap_setting %}
+        {% if 'include_jquery'|bootstrap_setting %}
+            <!-- jQuery JavaScript if it is in head -->
+	    {% bootstrap_jquery jquery='include_jquery'|bootstrap_setting %}
+        {% endif %}
+        <!-- Bootstrap JavaScript if it is in head -->
+        {% bootstrap_javascript %}
+    {% endif %}
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/style.css' %}">
+    {% block script %}
+    {% endblock %}
+
+    {% block style %}
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">Django Shop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+    <ul class="navbar-nav justify-content-end">
+      <li class="nav-item">
+        {% if user.is_authenticated %}
+          <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+        {% else %}
+          <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+        {% endif %}
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link btn btn-outline-success" href="">Cart
+            {% if cart|length > 0 %}
+                ${{cart.get_product_total}} with {{cart|length}} items
+            {% else %}
+                : Empty
+            {% endif %}
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container">
+    {% block content%}
+
+    {% endblock %}
+</div>
+</body>
+</html>
